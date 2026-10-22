@@ -1,0 +1,55 @@
+﻿@model BE0303.Models.ViewModel.CustomerSearchVM
+@using PagedList
+@using PagedList.Mvc
+
+@if (Model.Customers.Count == 0)
+{
+    <div class="alert alert-warning">Không tìm thấy khách hàng nào phù hợp.</div>
+}
+else
+{
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr style="background-color:#3c763d; color:#fff;">
+                <th>Mã KH</th>
+                <th>Họ và tên</th>
+                <th>Số điện thoại</th>
+                <th>Email</th>
+                <th>Địa chỉ</th>
+                <th>Tên đăng nhập</th>
+                <th style="width:120px;">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Customers)
+            {
+                <tr>
+                    <td>@item.CustomerID</td>
+                    <td>@item.CustomerName</td>
+                    <td>@item.CustomerPhone</td>
+                    <td>@item.CustomerEmail</td>
+                    <td>@item.CustomerAddress</td>
+                    <td>@item.Username</td>
+                    <td>
+                        @Html.ActionLink("Chi tiết", "Details", new { id = item.CustomerID }, new { @class = "btn btn-info btn-sm" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div>
+        Trang @(Model.Customers.PageCount < Model.Customers.PageNumber ? 0 : Model.Customers.PageNumber) / @Model.Customers.PageCount
+        (tổng cộng @Model.Customers.TotalItemCount khách hàng)
+    </div>
+
+    @* Giữ lại tiêu chí tìm kiếm và sắp xếp khi chuyển trang *@
+    @Html.PagedListPager(Model.Customers,
+        page => Url.Action("Index", new
+        {
+            page = page,
+            searchTerm = Model.SearchTerm,
+            sortOrder = Model.SortOrder
+        }),
+        PagedListRenderOptions.ClassicPlusFirstAndLast)
+}

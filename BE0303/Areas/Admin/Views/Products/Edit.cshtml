@@ -1,0 +1,33 @@
+﻿@model BE0303.Models.Product
+
+@{
+    ViewBag.Title = "Sửa sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="panel panel-warning">
+    <div class="panel-heading">
+        <h3 class="panel-title">Sửa sản phẩm</h3>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("Edit", "Products", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                @Html.HiddenFor(model => model.ProductID)
+                @* Giữ lại đường dẫn ảnh cũ nếu người dùng không chọn ảnh mới *@
+                @Html.HiddenFor(model => model.ProductImage)
+
+                @Html.Partial("PVCreateEditProduct", Model)
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Lưu" class="btn btn-warning" />
+                        @Html.ActionLink("Quay lại danh sách", "Index", null, new { @class = "btn btn-default" })
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

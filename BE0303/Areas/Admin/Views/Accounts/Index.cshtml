@@ -1,0 +1,38 @@
+﻿@model BE0303.Models.ViewModel.AccountSearchVM
+
+@{
+    ViewBag.Title = "Tài khoản Admin";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">QUẢN LÝ TÀI KHOẢN ADMIN</h3>
+    </div>
+    <div class="panel-body">
+
+        @* Form tìm kiếm và sắp xếp *@
+        @using (Html.BeginForm("Index", "Accounts", FormMethod.Get, new { @class = "form-inline", style = "margin-bottom:15px;" }))
+        {
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", placeholder = "Tên đăng nhập..." })
+            </div>
+            <div class="form-group">
+                @Html.DropDownListFor(m => m.SortOrder, new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "",          Text = "-- Sắp xếp --" },
+                    new SelectListItem { Value = "user_asc",  Text = "Tên đăng nhập: A đến Z" },
+                    new SelectListItem { Value = "user_desc", Text = "Tên đăng nhập: Z đến A" }
+                }, new { @class = "form-control" })
+            </div>
+            <input type="submit" value="Tìm kiếm" class="btn btn-primary" />
+            @Html.ActionLink("Đặt lại", "Index", null, new { @class = "btn btn-default" })
+        }
+
+        <p>
+            @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-success" })
+        </p>
+
+        @Html.Partial("PVListAccount", Model)
+    </div>
+</div>

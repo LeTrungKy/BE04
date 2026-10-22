@@ -1,0 +1,77 @@
+﻿@model BE0303.Models.ViewModel.CustomerOrdersVM
+
+@{
+    ViewBag.Title = "Chi tiết khách hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title">THÔNG TIN KHÁCH HÀNG</h3>
+    </div>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>Mã khách hàng</dt>
+            <dd>@Model.Customer.CustomerID</dd>
+
+            <dt>Họ và tên</dt>
+            <dd>@Model.Customer.CustomerName</dd>
+
+            <dt>Số điện thoại</dt>
+            <dd>@Model.Customer.CustomerPhone</dd>
+
+            <dt>Email</dt>
+            <dd>@Model.Customer.CustomerEmail</dd>
+
+            <dt>Địa chỉ</dt>
+            <dd>@Model.Customer.CustomerAddress</dd>
+
+            <dt>Tên đăng nhập</dt>
+            <dd>@Model.Customer.Username</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">DANH SÁCH ĐƠN HÀNG CỦA KHÁCH HÀNG</h3>
+    </div>
+    <div class="panel-body">
+        @if (Model.Orders.Count == 0)
+        {
+            <div class="alert alert-info">Khách hàng này chưa có đơn hàng nào.</div>
+        }
+        else
+        {
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr style="background-color:#337ab7; color:#fff;">
+                        <th>Mã đơn</th>
+                        <th>Ngày đặt</th>
+                        <th>Tổng tiền</th>
+                        <th>Thanh toán</th>
+                        <th>Địa chỉ giao hàng</th>
+                        <th style="width:120px;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model.Orders)
+                    {
+                        <tr>
+                            <td>@order.OrderID</td>
+                            <td>@string.Format("{0:dd/MM/yyyy}", order.OrderDate)</td>
+                            <td>@string.Format("{0:N0} đ", order.TotalAmount)</td>
+                            <td>@order.PaymentStatus</td>
+                            <td>@order.AddressDelivery</td>
+                            <td>
+                                @Html.ActionLink("Chi tiết", "OrderDetails", new { id = order.OrderID }, new { @class = "btn btn-info btn-sm" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+        @Html.ActionLink("Quay lại danh sách", "Index", null, new { @class = "btn btn-default" })
+    </div>
+</div>

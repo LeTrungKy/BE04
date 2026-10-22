@@ -1,0 +1,47 @@
+﻿@model BE0303.Models.ViewModel.ProductSearchVM
+
+@{
+    ViewBag.Title = "Sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Quản lý sản phẩm</h3>
+    </div>
+    <div class="panel-body">
+
+        @* Form tìm kiếm và sắp xếp *@
+        @using (Html.BeginForm("Index", "Products", FormMethod.Get, new { @class = "form-inline", style = "margin-bottom:15px;" }))
+        {
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", placeholder = "Tên, mô tả hoặc danh mục..." })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.MinPrice, new { @class = "form-control", placeholder = "Giá từ", type = "number", min = "0", style = "width:120px;" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.MaxPrice, new { @class = "form-control", placeholder = "Giá đến", type = "number", min = "0", style = "width:120px;" })
+            </div>
+            <div class="form-group">
+                @Html.DropDownListFor(m => m.SortOrder, new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "",           Text = "-- Sắp xếp --" },
+                    new SelectListItem { Value = "name_asc",   Text = "Tên: A đến Z" },
+                    new SelectListItem { Value = "name_desc",  Text = "Tên: Z đến A" },
+                    new SelectListItem { Value = "price_asc",  Text = "Giá: tăng dần" },
+                    new SelectListItem { Value = "price_desc", Text = "Giá: giảm dần" }
+                }, new { @class = "form-control" })
+            </div>
+            <input type="submit" value="Tìm kiếm" class="btn btn-primary" />
+            @Html.ActionLink("Đặt lại", "Index", null, new { @class = "btn btn-default" })
+        }
+
+        <p>
+            @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-success" })
+        </p>
+
+        @* Kết quả tìm kiếm và phân trang *@
+        @Html.Partial("PVListProduct", Model)
+    </div>
+</div>

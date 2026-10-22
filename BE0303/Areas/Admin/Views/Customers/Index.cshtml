@@ -1,0 +1,37 @@
+﻿@model BE0303.Models.ViewModel.CustomerSearchVM
+
+@{
+    ViewBag.Title = "Khách hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title">QUẢN LÝ KHÁCH HÀNG</h3>
+    </div>
+    <div class="panel-body">
+
+        @* Form tìm kiếm và sắp xếp *@
+        @using (Html.BeginForm("Index", "Customers", FormMethod.Get, new { @class = "form-inline", style = "margin-bottom:15px;" }))
+        {
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", placeholder = "Tên, SĐT, email hoặc tên đăng nhập...", style = "width:300px;" })
+            </div>
+            <div class="form-group">
+                @Html.DropDownListFor(m => m.SortOrder, new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "",           Text = "-- Sắp xếp --" },
+                    new SelectListItem { Value = "name_asc",   Text = "Tên: A đến Z" },
+                    new SelectListItem { Value = "name_desc",  Text = "Tên: Z đến A" },
+                    new SelectListItem { Value = "email_asc",  Text = "Email: A đến Z" },
+                    new SelectListItem { Value = "email_desc", Text = "Email: Z đến A" }
+                }, new { @class = "form-control" })
+            </div>
+            <input type="submit" value="Tìm kiếm" class="btn btn-success" />
+            @Html.ActionLink("Đặt lại", "Index", null, new { @class = "btn btn-default" })
+        }
+
+        @* Kết quả tìm kiếm và phân trang *@
+        @Html.Partial("PVListCustomer", Model)
+    </div>
+</div>

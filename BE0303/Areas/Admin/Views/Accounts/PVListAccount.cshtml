@@ -1,0 +1,47 @@
+﻿@model BE0303.Models.ViewModel.AccountSearchVM
+@using PagedList
+@using PagedList.Mvc
+
+@if (Model.Accounts.Count == 0)
+{
+    <div class="alert alert-warning">Không tìm thấy tài khoản nào.</div>
+}
+else
+{
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr style="background-color:#337ab7; color:#fff;">
+                <th>Tên đăng nhập</th>
+                <th>Vai trò</th>
+                <th style="width:200px;">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Accounts)
+            {
+                <tr>
+                    <td>@item.Username</td>
+                    <td>@(item.UserRole == null ? "" : item.UserRole.Trim())</td>
+                    <td>
+                        @Html.ActionLink("Đổi mật khẩu", "Edit", new { id = item.Username.Trim() }, new { @class = "btn btn-warning btn-sm" })
+                        @Html.ActionLink("Xóa", "Delete", new { id = item.Username.Trim() }, new { @class = "btn btn-danger btn-sm" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div>
+        Trang @(Model.Accounts.PageCount < Model.Accounts.PageNumber ? 0 : Model.Accounts.PageNumber) / @Model.Accounts.PageCount
+        (tổng cộng @Model.Accounts.TotalItemCount tài khoản)
+    </div>
+
+    @Html.PagedListPager(Model.Accounts,
+        page => Url.Action("Index", new
+        {
+            page = page,
+            searchTerm = Model.SearchTerm,
+            sortOrder = Model.SortOrder
+        }),
+        PagedListRenderOptions.ClassicPlusFirstAndLast)
+}

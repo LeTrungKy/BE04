@@ -1,0 +1,4 @@
+﻿CREATE DATABASE MyStore;
+GO
+USE MyStore;
+GO
